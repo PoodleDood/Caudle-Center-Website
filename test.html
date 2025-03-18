@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Estimator Test</title>
+    <style>
+        :root {
+            --primary-color: #008080;
+            --secondary-color: #D2B48C;
+            --text-color: #333;
+            --background-color: #f5f5f5;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #006666;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .cost-breakdown {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .total-cost {
+            font-weight: bold;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cost Estimator</h1>
+        <form id="costEstimator">
+            <div class="form-group">
+                <label for="procedure">Procedure Type:</label>
+                <select id="procedure" required>
+                    <option value="">Select Procedure</option>
+                    <option value="traditional">Traditional Liposuction</option>
+                    <option value="rf">Liposuction with RF Energy</option>
+                    <option value="combined">Combined Procedures</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="area">Treatment Area:</label>
+                <select id="area" required>
+                    <option value="">Select Area</option>
+                    <option value="abdomen">Abdomen</option>
+                    <option value="thighs">Thighs</option>
+                    <option value="arms">Arms</option>
+                    <option value="flanks">Flanks</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sessions">Number of Sessions:</label>
+                <input type="number" id="sessions" min="1" max="4" value="1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Treatments:</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="addons" value="skin-tightening">
+                        Skin Tightening
+                    </label>
+                    <label>
+                        <input type="checkbox" name="addons" value="post-op">
+                        Post-Op Care
+                    </label>
+                    <label>
+                        <input type="checkbox" name="addons" value="massage">
+                        Massage Sessions
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit">Calculate Cost</button>
+        </form>
+
+        <div class="result" id="result">
+            <h3>Estimated Cost Breakdown</h3>
+            <div class="cost-breakdown">
+                <div class="cost-item">
+                    <span>Base Procedure:</span>
+                    <span id="baseCost">$0</span>
+                </div>
+                <div class="cost-item">
+                    <span>Treatment Area:</span>
+                    <span id="areaCost">$0</span>
+                </div>
+                <div class="cost-item">
+                    <span>Additional Sessions:</span>
+                    <span id="sessionsCost">$0</span>
+                </div>
+                <div class="cost-item">
+                    <span>Additional Treatments:</span>
+                    <span id="addonsCost">$0</span>
+                </div>
+                <div class="total-cost">
+                    <span>Total Estimated Cost:</span>
+                    <span id="totalCost">$0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('costEstimator').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Base costs
+            const baseCosts = {
+                traditional: 3000,
+                rf: 4000,
+                combined: 5000
+            };
+
+            // Area costs
+            const areaCosts = {
+                abdomen: 2000,
+                thighs: 2500,
+                arms: 1500,
+                flanks: 1800
+            };
+
+            // Get form values
+            const procedure = document.getElementById('procedure').value;
+            const area = document.getElementById('area').value;
+            const sessions = parseInt(document.getElementById('sessions').value);
+            const addons = Array.from(document.querySelectorAll('input[name="addons"]:checked')).map(cb => cb.value);
+
+            // Calculate costs
+            let baseCost = baseCosts[procedure] || 0;
+            let areaCost = areaCosts[area] || 0;
+            let sessionsCost = (sessions - 1) * 1000; // Additional sessions cost
+            let addonsCost = addons.length * 500; // Each addon costs $500
+
+            // Update display
+            document.getElementById('baseCost').textContent = `$${baseCost.toLocaleString()}`;
+            document.getElementById('areaCost').textContent = `$${areaCost.toLocaleString()}`;
+            document.getElementById('sessionsCost').textContent = `$${sessionsCost.toLocaleString()}`;
+            document.getElementById('addonsCost').textContent = `$${addonsCost.toLocaleString()}`;
+            
+            const total = baseCost + areaCost + sessionsCost + addonsCost;
+            document.getElementById('totalCost').textContent = `$${total.toLocaleString()}`;
+            
+            // Show result
+            document.getElementById('result').classList.add('show');
+        });
+    </script>
+</body>
+</html> 
