@@ -1,15 +1,17 @@
-// Wait for the DOM to be fully loaded
+// Initialize all functions when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
     initNavigation();
     initScrollAnimations();
     initFaqAccordion();
+    initAccordion();
+    // initProcedureDropdowns(); // Comment out to avoid conflicts
     initGalleryFilters();
     initComparisonSliders();
     initTestimonialSlider();
     initBackToTop();
     initAppointmentScheduler();
     initCostEstimator();
+    addGalleryItems();
 });
 
 // Navigation functionality
@@ -18,28 +20,91 @@ function initNavigation() {
     const mainNav = document.querySelector('.main-nav');
     const header = document.querySelector('header');
     const navLinks = document.querySelectorAll('.main-nav a');
+    
+    // Create mobile menu overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'mobile-menu-overlay';
+    document.body.appendChild(overlay);
+    
+    // Create close button for mobile menu
+    const closeBtn = document.createElement('span');
+    closeBtn.className = 'mobile-close';
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    mainNav.appendChild(closeBtn);
 
     // Mobile menu toggle
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', function() {
-            mainNav.classList.toggle('active');
-            this.classList.toggle('active');
-            
-            if (this.classList.contains('active')) {
-                this.innerHTML = '<i class="fas fa-times"></i>';
-            } else {
-                this.innerHTML = '<i class="fas fa-bars"></i>';
-            }
+            mainNav.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
         });
     }
+    
+    // Close mobile menu
+    function closeMobileMenu() {
+        mainNav.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Reset megamenu states
+        document.querySelectorAll('.has-megamenu').forEach(item => {
+            item.classList.remove('active');
+        });
+    }
+    
+    // Close button event
+    closeBtn.addEventListener('click', closeMobileMenu);
+    
+    // Overlay click event
+    overlay.addEventListener('click', closeMobileMenu);
+
+    // Handle megamenu on mobile
+    const megaMenuTriggers = document.querySelectorAll('.has-megamenu > a');
+    megaMenuTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            if (window.innerWidth <= 992) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                
+                // Toggle active class
+                if (parent.classList.contains('active')) {
+                    parent.classList.remove('active');
+                    parent.querySelector('.megamenu').style.display = 'none';
+                } else {
+                    // Close other open menus
+                    document.querySelectorAll('.has-megamenu').forEach(item => {
+                        if (item !== parent) {
+                            item.classList.remove('active');
+                            if (item.querySelector('.megamenu')) {
+                                item.querySelector('.megamenu').style.display = 'none';
+                            }
+                        }
+                    });
+                    
+                    parent.classList.add('active');
+                    parent.querySelector('.megamenu').style.display = 'block';
+                }
+            }
+        });
+    });
 
     // Close mobile menu when clicking a link
     navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            mainNav.classList.remove('active');
-            if (mobileMenuToggle) {
-                mobileMenuToggle.classList.remove('active');
-                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 992 && !link.parentElement.classList.contains('has-megamenu')) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                
+                closeMobileMenu();
+                
+                // Smooth scroll after menu closes
+                setTimeout(() => {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 300);
             }
         });
     });
@@ -69,10 +134,18 @@ function initNavigation() {
 
         navLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href').substring(1) === current) {
+            const href = link.getAttribute('href');
+            if (href && href.substring(1) === current) {
                 link.classList.add('active');
             }
         });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            closeMobileMenu();
+        }
     });
 }
 
@@ -148,24 +221,62 @@ function initFaqAccordion() {
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
         
-        if (question) {
-            question.addEventListener('click', function() {
-                // Toggle active class
-                item.classList.toggle('active');
-                
-                // Close other items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.classList.remove('active');
-                    }
-                });
+        question.addEventListener('click', () => {
+            // Close other open items
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item && otherItem.classList.contains('active')) {
+                    otherItem.classList.remove('active');
+                }
             });
-        }
+            
+            // Toggle current item
+            item.classList.toggle('active');
+        });
     });
+}
 
-    // Open the first FAQ item by default
-    if (faqItems.length > 0) {
-        faqItems[0].classList.add('active');
+// Initialize procedure dropdowns
+function initProcedureDropdowns() {
+    const dropdownItems = document.querySelectorAll('.dropdown-accordion');
+    
+    if (dropdownItems.length === 0) return; // Exit if no items found
+    
+    dropdownItems.forEach(item => {
+        const header = item.querySelector('.dropdown-header');
+        const content = item.querySelector('.dropdown-content');
+        
+        // Set initial height to make animation work properly
+        if (item.classList.contains('active')) {
+            content.style.maxHeight = content.scrollHeight + "px";
+        } else {
+            content.style.maxHeight = "0px";
+        }
+        
+        header.addEventListener('click', () => {
+            // Toggle current item
+            const isActive = item.classList.contains('active');
+            
+            // Close all dropdowns first
+            dropdownItems.forEach(otherItem => {
+                const otherContent = otherItem.querySelector('.dropdown-content');
+                otherItem.classList.remove('active');
+                otherContent.style.maxHeight = "0px";
+            });
+            
+            // If the clicked item wasn't active, open it
+            if (!isActive) {
+                item.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+    
+    // Open first dropdown by default
+    if (dropdownItems.length > 0) {
+        const firstItem = dropdownItems[0];
+        const firstContent = firstItem.querySelector('.dropdown-content');
+        firstItem.classList.add('active');
+        firstContent.style.maxHeight = firstContent.scrollHeight + "px";
     }
 }
 
@@ -815,8 +926,57 @@ function addGalleryItems() {
     }
 }
 
-// Call this function after DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Add gallery items
-    addGalleryItems();
+// Mobile Menu Dropdowns
+document.querySelectorAll('.dropdown > a').forEach(dropdown => {
+    dropdown.addEventListener('click', (e) => {
+        if (window.innerWidth <= 992) {
+            e.preventDefault();
+            const parent = dropdown.parentElement;
+            parent.classList.toggle('active');
+        }
+    });
 });
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 992) {
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    }
+});
+
+// Initialize accordion system
+function initAccordion() {
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    
+    if (accordionItems.length === 0) return;
+    
+    accordionItems.forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+        
+        if (header && content) {
+            header.addEventListener('click', function() {
+                if (item.classList.contains('open')) {
+                    // If already open, do nothing (keep it open)
+                    return;
+                }
+                
+                // Close all other accordions
+                accordionItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('open')) {
+                        otherItem.classList.remove('open');
+                        otherItem.querySelector('.accordion-content').style.display = 'none';
+                    }
+                });
+                
+                // Open this accordion
+                item.classList.add('open');
+                content.style.display = 'block';
+            });
+        }
+    });
+}

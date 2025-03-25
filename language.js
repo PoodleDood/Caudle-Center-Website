@@ -334,8 +334,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set default language
     let currentLang = 'en';
     
-    // Get language buttons
-    const langButtons = document.querySelectorAll('.language-btn');
+    // Get language buttons (both traditional and mini-grid)
+    const langButtons = document.querySelectorAll('.language-btn, .lang-btn');
     
     // Add click event to language buttons
     langButtons.forEach(button => {
@@ -343,44 +343,51 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get language code
             const lang = this.getAttribute('data-lang');
             
-            // Update active button
-            langButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            // Update active button on all language selectors
+            document.querySelectorAll('.language-btn, .lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
             
             // Change language
             changeLanguage(lang);
         });
     });
     
-    // Function to change language
-    function changeLanguage(lang) {
-        // Update current language
-        currentLang = lang;
+    // Rest of your existing code for handling translations
+});
+
+// Function to change language
+function changeLanguage(lang) {
+    // Update current language
+    currentLang = lang;
+    
+    // Get all elements with data-lang-key attribute
+    const elements = document.querySelectorAll('[data-lang-key]');
+    
+    // Update text for each element
+    elements.forEach(element => {
+        const key = element.getAttribute('data-lang-key');
         
-        // Get all elements with data-lang-key attribute
-        const elements = document.querySelectorAll('[data-lang-key]');
-        
-        // Update text for each element
-        elements.forEach(element => {
-            const key = element.getAttribute('data-lang-key');
-            
-            // Check if translation exists
-            if (translations[lang] && translations[lang][key]) {
-                // Check element type
-                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                    // For input elements, update placeholder
-                    element.placeholder = translations[lang][key];
-                } else if (element.tagName === 'OPTION') {
-                    // For option elements, update text
-                    element.textContent = translations[lang][key];
-                } else {
-                    // For other elements, update inner text
-                    element.textContent = translations[lang][key];
-                }
+        // Check if translation exists
+        if (translations[lang] && translations[lang][key]) {
+            // Check element type
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                // For input elements, update placeholder
+                element.placeholder = translations[lang][key];
+            } else if (element.tagName === 'OPTION') {
+                // For option elements, update text
+                element.textContent = translations[lang][key];
+            } else {
+                // For other elements, update inner text
+                element.textContent = translations[lang][key];
             }
-        });
-        
-        // Update document language
-        document.documentElement.lang = lang;
-    }
-}); 
+        }
+    });
+    
+    // Update document language
+    document.documentElement.lang = lang;
+} 

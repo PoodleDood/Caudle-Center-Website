@@ -11,18 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <div class="container">
-            <div class="language-options">
-                <button class="language-btn active" data-lang="en">English</button>
-                <button class="language-btn" data-lang="es">Español</button>
-                <button class="language-btn" data-lang="fr">Français</button>
-                <button class="language-btn" data-lang="zh">中文</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Header & Navigation -->
     <header>
         <div class="container">
@@ -35,15 +23,47 @@
                 <nav>
                     <ul class="main-nav">
                         <li><a href="#about" data-lang-key="nav-about">About</a></li>
-                        <li><a href="#procedures" data-lang-key="nav-procedures">Procedures</a></li>
-                        <li><a href="#gallery" data-lang-key="nav-gallery">Before & After</a></li>
-                        <li><a href="#lipedema" data-lang-key="nav-lipedema">Lipedema</a></li>
+                        <li class="has-megamenu" style="position: static;">
+                            <a href="#procedures" data-lang-key="nav-procedures">Procedures <i class="fas fa-chevron-down"></i></a>
+                            <div class="megamenu" style="position: absolute; top: 100%; left: 0; width: 100%; background-color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); padding: 2rem 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 999; display: none;">
+                                <div class="megamenu-inner">
+                                    <div class="megamenu-column">
+                                        <h4>Liposuction</h4>
+                                        <ul>
+                                            <li><a href="#procedures" data-lang-key="nav-procedures">Traditional Liposuction</a></li>
+                                            <li><a href="#rf" data-lang-key="nav-rf">RF Energy Treatment</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="megamenu-column">
+                                        <h4>Specialized Care</h4>
+                                        <ul>
+                                            <li><a href="#lipedema" data-lang-key="nav-lipedema">Lipedema Treatment</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="megamenu-column">
+                                        <h4>Patient Resources</h4>
+                                        <ul>
+                                            <li><a href="#gallery" data-lang-key="nav-gallery">Before & After</a></li>
+                                            <li><a href="#testimonials" data-lang-key="nav-testimonials">Testimonials</a></li>
+                                            <li><a href="#tools" data-lang-key="nav-tools">Treatment Tools</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="#gallery" data-lang-key="nav-results">Results</a></li>
                         <li><a href="#faq" data-lang-key="nav-faq">FAQ</a></li>
-                        <li><a href="#testimonials" data-lang-key="nav-testimonials">Testimonials</a></li>
                         <li><a href="#contact" data-lang-key="nav-contact">Contact</a></li>
-                        <li><a href="#tools" data-lang-key="nav-tools">Tools</a></li>
                     </ul>
                 </nav>
+                <div class="language-selector-mini">
+                    <div class="lang-grid">
+                        <button class="lang-btn active" data-lang="en"><span>EN</span></button>
+                        <button class="lang-btn" data-lang="es"><span>ES</span></button>
+                        <button class="lang-btn" data-lang="fr"><span>FR</span></button>
+                        <button class="lang-btn" data-lang="zh"><span>中</span></button>
+                    </div>
+                </div>
                 <div class="cta-button">
                     <a href="#book" class="btn btn-primary" data-lang-key="request-appointment">Request an Appointment</a>
                 </div>
@@ -71,6 +91,42 @@
         </video>
     </section>
 
+    <!-- Feature Callout Section -->
+    <section class="feature-callout">
+        <div class="container">
+            <div class="callout-grid">
+                <div class="callout-item">
+                    <div class="callout-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3>Expert Care</h3>
+                    <p>Board-certified specialists with advanced training in body contouring procedures</p>
+                </div>
+                <div class="callout-item">
+                    <div class="callout-icon">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <h3>Advanced Techniques</h3>
+                    <p>Combining traditional liposuction with cutting-edge RF technology for superior results</p>
+                </div>
+                <div class="callout-item">
+                    <div class="callout-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>Patient-Focused</h3>
+                    <p>Personalized treatment plans tailored to your unique body and aesthetic goals</p>
+                </div>
+                <div class="callout-item">
+                    <div class="callout-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Easy Scheduling</h3>
+                    <p>Convenient appointment times with minimal wait for consultations and procedures</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Procedure Details Section -->
     <section id="procedures" class="procedures section-padding">
         <div class="container">
@@ -80,32 +136,81 @@
                 <p data-lang-key="procedures-subtitle">Advanced body contouring solutions for your unique needs</p>
             </div>
             <div class="procedure-content">
-                <div class="procedure-text animate-from-left">
+                <div class="procedure-text">
                     <h3 data-lang-key="procedures-heading">Combining Traditional Methods with RF Energy</h3>
                     <p data-lang-key="procedures-text-1">At The Caudle Center, we utilize cutting-edge liposuction techniques that go beyond traditional fat removal. By combining conventional liposuction with radiofrequency (RF) energy devices like BodyTite, we offer superior skin tightening and enhanced body shaping results.</p>
-                    <p data-lang-key="procedures-text-2">For patients with pre-existing skin laxity, using these combined techniques is essential for optimal outcomes. The RF energy stimulates collagen production, resulting in firmer, more youthful-looking skin in addition to the improved contours from fat removal.</p>
-                    <div class="procedure-features">
-                        <div class="feature">
-                            <i class="fas fa-check-circle"></i>
-                            <h4 data-lang-key="feature-1">Precise Fat Removal</h4>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check-circle"></i>
-                            <h4 data-lang-key="feature-2">Enhanced Skin Tightening</h4>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check-circle"></i>
-                            <h4 data-lang-key="feature-3">Reduced Recovery Time</h4>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-check-circle"></i>
-                            <h4 data-lang-key="feature-4">Natural-Looking Results</h4>
-                        </div>
-                    </div>
                 </div>
-                <div class="procedure-image animate-from-right">
+                <div class="procedure-image">
                     <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="Modern liposuction procedure">
                 </div>
+            </div>
+            
+            <!-- Visible Static Procedure Information -->
+            <div class="info-sections">
+                <div class="info-section">
+                    <div class="info-header">
+                        <h3>Traditional Liposuction</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>Traditional liposuction involves the surgical removal of excess fat deposits to improve body contours. This time-tested technique uses a thin tube (cannula) to suction out fat cells through small incisions.</p>
+                        <ul>
+                            <li><strong>Ideal for:</strong> Removing larger volumes of fat</li>
+                            <li><strong>Benefits:</strong> Targeted precision for specific problem areas</li>
+                            <li><strong>Safety:</strong> Well-established safety profile</li>
+                            <li><strong>Results:</strong> Permanently removes fat cells</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-header">
+                        <h3>RF Energy Enhancement</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>Our RF energy enhancement uses advanced radiofrequency technology (BodyTite) to deliver targeted thermal energy to both the skin and underlying fat.</p>
+                        <ul>
+                            <li><strong>Skin Tightening:</strong> Up to 40% more skin contraction</li>
+                            <li><strong>Collagen Production:</strong> Stimulates natural collagen for firmer skin</li>
+                            <li><strong>Recovery:</strong> Reduces procedure and recovery time</li>
+                            <li><strong>Best For:</strong> Particularly effective for areas with skin laxity</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-header">
+                        <h3>Recovery Process</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>Our advanced techniques result in a more comfortable recovery with excellent results.</p>
+                        <ul>
+                            <li><strong>Return to Work:</strong> Most patients return within 3-7 days</li>
+                            <li><strong>Compression:</strong> Garments worn for 2-6 weeks</li>
+                            <li><strong>Bruising:</strong> Minimal compared to traditional methods</li>
+                            <li><strong>Final Results:</strong> Visible in 3-6 months as swelling resolves</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-header">
+                        <h3>Candidacy Requirements</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>The ideal candidate for our advanced liposuction procedures:</p>
+                        <ul>
+                            <li><strong>Weight:</strong> Within 30% of ideal body weight</li>
+                            <li><strong>Skin Quality:</strong> Good elasticity (RF helps with laxity)</li>
+                            <li><strong>Stability:</strong> Maintains a stable weight</li>
+                            <li><strong>Expectations:</strong> Has realistic goals about results</li>
+                            <li><strong>Health:</strong> Is in good overall health</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-centered">
+                <a href="#book" class="btn btn-primary">Schedule Your Consultation</a>
             </div>
         </div>
     </section>
@@ -582,6 +687,32 @@
         </div>
     </section>
 
+    <!-- Testimonial Banner -->
+    <section class="testimonial-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="quote-icon">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <div class="banner-quote">
+                    <blockquote>
+                        "The Caudle Center transformed not just my body, but my confidence. Their expertise in liposuction and patient care is unmatched. I couldn't be happier with my results and the entire experience."
+                    </blockquote>
+                    <div class="quote-author">
+                        <span class="author-name">Sarah M.</span>
+                        <span class="author-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact & Booking Section -->
     <section id="contact" class="contact section-padding bg-light">
         <div class="container">
@@ -717,6 +848,79 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
     <script src="language.js"></script>
+    
+    <!-- Inline Script Fix -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fix for mega menu
+            const megaMenuItems = document.querySelectorAll('.has-megamenu');
+            
+            megaMenuItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const megaMenu = this.querySelector('.megamenu');
+                    megaMenu.style.opacity = '1';
+                    megaMenu.style.visibility = 'visible';
+                    megaMenu.style.transform = 'translateY(0)';
+                    megaMenu.style.display = 'block';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const megaMenu = this.querySelector('.megamenu');
+                    megaMenu.style.opacity = '0';
+                    megaMenu.style.visibility = 'hidden';
+                    megaMenu.style.transform = 'translateY(10px)';
+                    setTimeout(() => {
+                        megaMenu.style.display = 'none';
+                    }, 300);
+                });
+            });
+            
+            // Direct fix for procedure dropdowns
+            const dropdownItems = document.querySelectorAll('.dropdown-accordion');
+            
+            if (dropdownItems.length > 0) {
+                dropdownItems.forEach(item => {
+                    const header = item.querySelector('.dropdown-header');
+                    const content = item.querySelector('.dropdown-content');
+                    
+                    if (header && content) {
+                        header.addEventListener('click', function() {
+                            // Toggle active class
+                            const isActive = item.classList.contains('active');
+                            
+                            // Close all dropdowns first
+                            dropdownItems.forEach(otherItem => {
+                                const otherContent = otherItem.querySelector('.dropdown-content');
+                                if (otherContent) {
+                                    otherItem.classList.remove('active');
+                                    otherContent.style.maxHeight = "0px";
+                                    otherContent.style.padding = "0px";
+                                    otherItem.querySelector('.dropdown-icon').style.transform = 'rotate(0deg)';
+                                }
+                            });
+                            
+                            // If it wasn't active, make it active
+                            if (!isActive) {
+                                item.classList.add('active');
+                                content.style.maxHeight = content.scrollHeight + "px";
+                                content.style.padding = "1.5rem";
+                                item.querySelector('.dropdown-icon').style.transform = 'rotate(180deg)';
+                            }
+                        });
+                    }
+                });
+                
+                // Make sure the first dropdown is open by default if not already set
+                const firstItem = dropdownItems[0];
+                if (!firstItem.classList.contains('active')) {
+                    const firstContent = firstItem.querySelector('.dropdown-content');
+                    firstItem.classList.add('active');
+                    firstContent.style.maxHeight = firstContent.scrollHeight + "px";
+                    firstContent.style.padding = "1.5rem";
+                    firstItem.querySelector('.dropdown-icon').style.transform = 'rotate(180deg)';
+                }
+            }
+        });
+    </script>
 </body>
-</html> 
 </html> 
